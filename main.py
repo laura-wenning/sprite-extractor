@@ -16,7 +16,7 @@ def main():
 			print("To do - Help")
 			return
 
-	outputName = "sprite.png"
+	outputName = ""
 	if(len(sys.argv) >= 3):
 		outputName = sys.argv[2]
 
@@ -26,12 +26,36 @@ def main():
 		return
 
 	spritesheet = pygame.image.load(filename)
-	sprite = yankSprite(spritesheet)
+	yankFunction = determineYankFunction(spritesheet)
+
+	if(yankFunction == "face"):
+		sprite = yankFace(spritesheet)
+	
+	else:
+		sprite = yankSprite(spritesheet)
+
+	if(outputName == ""):
+		outputName = yankFunction + '.png'
+
 	pygame.image.save(sprite, outputName)
 
 
 	# Create subsurface
 	# Save sprite (do not overwrite)
+
+def determineYankFunction(spritesheet):
+	size = spritesheet.get_size()
+	# print(size)
+	# print(size[0])
+
+	if(size[0] == 576 and size[1] == 384):
+		return "sprite"
+
+	if(size[0] == 576 and size[1] == 288):
+		return "face"
+
+	return "sprite"
+
 
 def parseArgs():
 	"""
@@ -52,6 +76,7 @@ def parseArgs():
 	}
 
 	return 
+	
 
 def yankSprite(spritesheet):
 	"""
