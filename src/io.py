@@ -1,18 +1,27 @@
 import yaml
 
+defaults = {
+  "recentFolder":"recent",
+  "readFolders":[],
+  "exportRXGC": False
+}
+
 def readConfig():
   """
   Reads in the configuration yaml file
   Returns a dict with the configuration data
   # TODO - include default configuration information
   """
-  config = {}
+  global defaults
+  config = defaults
 
   with open("./config.yaml", "r") as stream:
     try:
-      config = yaml.safe_load(stream)
+      config.update(yaml.safe_load(stream))
     except yaml.YAMLError as exc:
       print(exc)
+
+    print(config)
 
   return config
 
