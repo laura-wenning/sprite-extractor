@@ -20,7 +20,7 @@ def main():
 	history = io.readHistory()
 
 	while(True):
-		userInput = input()
+		userInput = input("> ")
 
 		userInput = userInput.lower()
 		print("user input:", userInput)

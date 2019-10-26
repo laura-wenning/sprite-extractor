@@ -1,14 +1,32 @@
 from os import path, walk
 
+import src.character as character
+
 def run(history, config):
+  """
+  Runs the main function of going through each file, 
+  seeing what needs updating, updating it, and returning 
+  the resulting information
+
+  param history - the previously altered information
+  param config - the configuration data
+  """
   # Read all folders from the config
   characterList = __listCharacters__(config)
-  characterList = __processRXGCs__(characterList, config)
-  characterList = __processRaws__(characterList, config)
+  print(characterList)
+
+  for char in characterList:
+    char.print()
+    char.processImages()
+  # characterList = __processRXGCs__(characterList, config)
+  # characterList = rawProcessor.processAll(characterList, config)
 
   return history
 
 def __listCharacters__(config):
+  """
+  Generates a list of all characters with their 
+  """
   characters = []
   # file: {lastTouched: [timestamp], processType: [raw, img, none]}
   if config["readFolders"] == None:
@@ -21,18 +39,11 @@ def __listCharacters__(config):
 
       # Extract target filename
       baseFilename = __getCharacterFilename__(filenames)
+      newCharacter = character.Character(dirpath, baseFilename)
       
-      # Find which of the files is newest
-      profileStep, spriteStep = __determineSteps__(dirpath, baseFilename, config)
+      characters.append(newCharacter)
 
-      characters.append({
-        "baseFilename": baseFilename,
-        "dirpath": dirpath,
-        "profileStep": profileStep,
-        "spriteStep": spriteStep
-      })
-
-  print(characters)
+  return characters
       
 
 def __isCharacterFolder__(filenames):
@@ -193,8 +204,13 @@ def __getRawStep__(rawTime, processedTime):
   return False
   
 def __processRXGCs__(characterList, config):
+  for character in characterList:
+    if character["profileStep"] == "rxgc":
+      character["profileStep"] = "raw"
+    if character["spriteStep"] == "rxgc":
+      character["spriteStep"] = "raw"
 
-  return
+  return characterList
 
 def __processRXGC__(character, config):
   return
@@ -202,5 +218,8 @@ def __processRXGC__(character, config):
 def __processRaws__(characterList, config):
   return
 
-def __processRaw__(character, config):
+def __processRaw__(character, imageType, config):
+  # Does image exist? 
+  # Determine type of image
+
   return
